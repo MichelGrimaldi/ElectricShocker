@@ -1,11 +1,11 @@
-# AN ELECTRIC SHOCKER DIY DEVICE FOR SELF DEFENSE
+# AN ELECTRIC SHOCKER DEVICE FOR SELF DEFENSE
 
 Electric shock weapons are a solution for non lethal self defense. 
 
 
-<span style="color:red">**Security Warning**</span>
+[#f03c15]**Security Warning**
 
-<span style="color:red">
+
 Be careful, submitting somebody to an electric shock maybe very dangerous. <br>
 
 The device is given here under the **full responsibility** of people who will use it. <br> 
@@ -13,7 +13,7 @@ The device is given here under the **full responsibility** of people who will us
 Before use it, you must inquire about the law relating to such a device in your country. <br>
 
 The author cannot, under any circumstances, be held responsible for the use you will make of it. <br>
-</span>
+`#f03c15` 
 
 This project involves the design and the creation of a DIY portable device that can deliver a strong electrical shock for self defense purposes. 
 
@@ -21,6 +21,7 @@ This project involves the design and the creation of a DIY portable device that 
 ![device1](images/device1.png)
 ![device2](images/device2.png)
 ![device3](images/device3.png)
+
 **3D representation of the device** 
 
 
@@ -107,7 +108,7 @@ You can use, as it, or tune the model by adjusting the dimensions of various ele
 
 The electrical design includes the integration of all components and the implementation of safety features to prevent accidental discharge. 
 
-..... todo
+..... todo 
 
 
 ## Conclusion
