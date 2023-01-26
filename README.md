@@ -1,71 +1,100 @@
-#Electric Shocker
+#AN ELECTRIC SHOCKER DIY DEVICE FOR SELF DEFENSE
 
-Electric shock weapons are an increasingly popular form of non lethal self defense. Due to their accessibility and reliability, they are used worldwide by both the police force and average civilians.
+Electric shock weapons are a solution for non lethal self defense. 
 
-The project involves the design and creation of a portable device that can deliver a strong electrical shock for self defense purposes. 
+
+<span style="color:red">**Security Warning**</span>
+
+<span style="color:red">
+Be careful, submitting somebody to an electric shock maybe very dangerous. <br>
+
+The device is given here under the **full responsibility** of people who will use it. <br> 
+
+Before use it, you must inquire about the law relating to such a device in your country. <br>
+
+The author cannot, under any circumstances, be held responsible for the use you will make of it. <br>
+</span>
+
+This project involves the design and the creation of a DIY portable device that can deliver a strong electrical shock for self defense purposes. 
 
 ![device](images/device.png)
 ![device1](images/device1.png)
 ![device2](images/device2.png)
 ![device3](images/device3.png)
+**3D representation of the device** 
 
 
-**The device includes :**
+**The device is based on four main common electronic components that can easily be found on online sales sites :**
+
+![](images/battery.png)
+
 a rechargeable 18650 Lithium-Ion battery, 3.7V, 2200mAh
-![battery](images/battery.png)
+
+![](images/charger.png)
 a battery charging circuit
-![charger](images/charger.png)
+
+![](images/high_voltage.png)
+
 a DC 3V-6V bis 400kV Boost Step up Power Module High Voltage Generator
-![HVM](images/high_voltage.png)
+
+![](images/switchs.png)
+
 an on/off switch and an activation button.
-![switchs](images/switchs.png)
 
+**The above components are organized into an housing case compozed of 4 parts :**
 
-**The mechanical housing consists of 4 parts :**
-the main body containning the battery and the high voltage module 62.9 mm x 32.5 mm x 92 mm
-![main](images/main.png)
-the top cover on which the electrodes are positioned
-![top](images/top.png)
-the bottom cover on which are positionned the ON/OFF switch and the usb battery charger
-![bottom](images/bottom.png)
+![](images/main.png)
+
+the main body containning the battery, the high voltage module and the flash button. The size of the presented model is 62.9 mm x 32.5 mm x 92 mm
+
+![](images/top.png)
+
+the cover supporting the electrodes on which the high voltage will be applied
+
+![](images/bottom.png)
+
+the bottom cover supporting the ON/OFF switch and the usb battery charger
+
+![](images/spacer.png)
+
 a spacer. 
-![sparce](images/spacer.png)
 
-It is designed as a full parametric 3D model under [OpenSCAD](https://openscad.org).
+The device given as source code is designed as a full parametric 3D model under [OpenSCAD](https://openscad.org).
 
-You can tune the model adjusting the dimensions of:
-- the electrodes
+You can use, as it, or tune the model by adjusting the dimensions of various elements (default value parameters of these elements are specified below):
+
+- **the electrodes**
 	- electrode_diam=3;
 	- electrode_spacing=12;
 	- electrode_angle=60;
 	- electrode_length = 11;
 	- electrode_shift = 20;
-- the battery
+- **the battery**
 	- battery_length=67;
 	- battery_diam=18.4;
-- the high voltage module
+- **the high voltage module**
 	- hv_length=63;
 	- hv_diam=24.5;
-- the battery contact (Upholsterer's point))
+- **the battery contact (Upholsterer's point)**
 	- battery_contact_diam = 4;
 	- battery_contact_height=4;
-- the usb charger
+- **the usb charger**
 	- charger_dim =[17,2, 28];
-- the mechanical clearance
+- **the common mechanical clearance between elements**
 	- clearance = 0.2;    
-- the high lid
+- **the high lid**
 	- high_lid_inclusion = 10;
-- the low lid
+- **the low lid**
 	- low_lid_inclusion = 10;
-- the spacer
+- **the spacer**
 	- high_spacer_height = 3;
-- the main body 
+- **the main body** 
 	- package_thickness = 4;
 	- package_int_size = [hv_diam+battery_diam+5*package_thickness, 
 						hv_diam+2*package_thickness, 
 						battery_length+high_lid_inclusion+low_lid_inclusion+high_spacer_height+2];
 	- package_boss_diam = 5; 
-- the positions inside main body
+- **positions inside the main body**
 	- battery_X_pos = package_int_size[X_axis]/2-package_thickness/2-battery_diam/2;
 	- hv_X_pos = -package_int_size[X_axis]/2+package_thickness/2+hv_diam/2;
 	- charger_X_pos = 5;
