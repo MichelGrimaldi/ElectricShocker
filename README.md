@@ -1,4 +1,4 @@
-#AN ELECTRIC SHOCKER DIY DEVICE FOR SELF DEFENSE
+# AN ELECTRIC SHOCKER DIY DEVICE FOR SELF DEFENSE
 
 Electric shock weapons are a solution for non lethal self defense. 
 
@@ -24,7 +24,9 @@ This project involves the design and the creation of a DIY portable device that 
 **3D representation of the device** 
 
 
-**The device is based on four main common electronic components that can easily be found on online sales sites :**
+## Description
+
+The device is based on four main common electronic components that can easily be found on online sales sites as follow:
 
 ![](images/battery.png)
 
@@ -39,9 +41,9 @@ a DC 3V-6V bis 400kV Boost Step up Power Module High Voltage Generator
 
 ![](images/switchs.png)
 
-an on/off switch and an activation button.
+on/off switch and an activation button.
 
-**The above components are organized into an housing case compozed of 4 parts :**
+The above components are organized into an housing case compozed of 4 parts :
 
 ![](images/main.png)
 
@@ -59,7 +61,9 @@ the bottom cover supporting the ON/OFF switch and the usb battery charger
 
 a spacer. 
 
-The device given as source code is designed as a full parametric 3D model under [OpenSCAD](https://openscad.org).
+## Mechanical design
+
+The device is designed as a full parametric 3D model under [OpenSCAD](https://openscad.org).
 
 You can use, as it, or tune the model by adjusting the dimensions of various elements (default value parameters of these elements are specified below):
 
@@ -99,7 +103,14 @@ You can use, as it, or tune the model by adjusting the dimensions of various ele
 	- hv_X_pos = -package_int_size[X_axis]/2+package_thickness/2+hv_diam/2;
 	- charger_X_pos = 5;
  
+## Electrical design
+
 The electrical design includes the integration of all components and the implementation of safety features to prevent accidental discharge. 
+
+..... todo
+
+
+## Conclusion
 
 The goal of this project is to create a practical and easy-to-use self defense tool that can provide a strong electrical shock to an attacker.
 
