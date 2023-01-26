@@ -5,6 +5,10 @@ Electric shock weapons are an increasingly popular form of non lethal self defen
 The project involves the design and creation of a portable device that can deliver a strong electrical shock for self defense purposes. 
 
 ![device](images/device.png)
+![device1](images/device1.png)
+![device2](images/device2.png)
+![device3](images/device3.png)
+
 
 **The device includes :**
 a rechargeable 18650 Lithium-Ion battery, 3.7V, 2200mAh
@@ -18,7 +22,7 @@ an on/off switch and an activation button.
 
 
 **The mechanical housing consists of 4 parts :**
-the main body containning the battery and the high voltage module
+the main body containning the battery and the high voltage module 62.9 mm x 32.5 mm x 92 mm
 ![main](images/main.png)
 the top cover on which the electrodes are positioned
 ![top](images/top.png)
