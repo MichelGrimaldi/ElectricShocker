@@ -2,8 +2,9 @@
 
 Electric shock weapons are a solution for non lethal self defense. 
 
-----------------------------------------------------------------------------------------------------
-**Security Warning**
+---------------------------------------------------------------------------------------------------------------
+
+                                  **Security Warning**
 
 Be careful, submitting somebody to an electric shock maybe very dangerous. 
 
@@ -11,13 +12,10 @@ The device is given here under the **full responsibility** of people who will us
 
 Before use it, you must inquire about the law relating to such a device in your country. 
 
-The author cannot, under any circumstances, be held responsible for the use you will make of it.  
-----------------------------------------------------------------------------------------------------
+The author cannot, under any circumstances, be held responsible for the use you will make of it. 
+ 
+----------------------------------------------------------------------------------------------------------------
 
-
-<video width="320" height="240" controls>
-<source src="images/video.mp4" type="video/mp4">
-</video>
 
 This project involves the design and the creation of a DIY portable device that can deliver a strong electrical shock for self defense purposes. 
 
