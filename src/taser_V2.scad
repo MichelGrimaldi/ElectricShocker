@@ -313,7 +313,7 @@ dim_bos = package_int_size-[package_boss_diam,package_boss_diam,package_boss_dia
 difference(){
     union(){
         rotate([0,180,0])box(aperture_axis=Z_axis, lid=true);        
-    translate([0,0,low_lid_inclusion/2])cube([package_int_size[X_axis]-clearance, package_int_size[Y_axis]-clearance, low_lid_inclusion], center=true);
+    translate([0,0,(low_lid_inclusion-10*clearance)/2])cube([package_int_size[X_axis]-clearance, package_int_size[Y_axis]-clearance, low_lid_inclusion-10*clearance], center=true); // 10*clearance smaller
     }   
       // 4 holes   
   for (i=[-1, +1])
@@ -361,7 +361,7 @@ union(){
 //                              main script code
 //*****************************************************************************
 //difference(){
-     %main_body();
+     main_body();
     //translate([0,100,0])cube([200,200,200], center=true);
 //}
 
@@ -377,7 +377,7 @@ translate([hv_X_pos,0,-32])HV();
 //
 translate([-10,0,-package_int_size[Z_axis]/2])rotate([0,90,90])on_off_switch();
 translate([0,0,-package_int_size[Z_axis]/2 ]){
-   low_lid();
+   !low_lid();
     translate([charger_X_pos,0,2])rotate([180,0,90])charger(footprint=false);    
     }
 color("white")translate([0,0,package_int_size[Z_axis]/2+package_thickness])electrodes();
