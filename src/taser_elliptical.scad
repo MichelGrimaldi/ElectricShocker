@@ -35,21 +35,25 @@ clearance = 0.2;
 // high lid
 high_lid_inclusion = 10;
 // low lid
-low_lid_inclusion = 10;
+low_lid_inclusion = 8;
 // high spacer
 high_spacer_height = 3;
 // main body 
 package_thickness = 4;
-package_int_size = [hv_diam+battery_diam+5*package_thickness, 
+package_wire_hole_width=10;
+package_int_size = [hv_diam+battery_diam+package_thickness+package_wire_hole_width/2, 
                     hv_diam+2*package_thickness, 
-                    battery_length+high_lid_inclusion+low_lid_inclusion+high_spacer_height+2];
+                    battery_length+high_lid_inclusion+low_lid_inclusion+high_spacer_height];
 package_boss_diam = 5; 
 // position inside main body
-battery_X_pos = package_int_size[X_axis]/2-package_thickness/2-battery_diam/2;
-hv_X_pos = -package_int_size[X_axis]/2+package_thickness/2+hv_diam/2;
-charger_X_pos = 5;
+battery_X_pos = package_int_size[X_axis]/2-battery_diam/2;
+hv_X_pos = -package_int_size[X_axis]/2+hv_diam/2+1;
+charger_X_pos = 4;
+on_off_switch_X_pos = 8;
+// button position
+button_Z_pos = 0; //-package_int_size[Z_axis]/2;
+button_X_pos = 2;
 
-echo(package_int_size);
 //-------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------
 //                                  GENERIC ELEMENTS
@@ -183,49 +187,44 @@ union(){
 }
 
 //------------------------------------------------------------------------------------------
-//  parametric box
+//  parametric elliptic box
 //  dim_int = [x,y,z] interior box
 //  ep = box thickness
 //  aperture_axis = axis direction of the opening
 //  lid = lid or body of the box,
 //  boss_diam = 4 bosses diameter,
 //  full = box is full (no interior),
-//  rounded = rounded corners
-module box( dim_int = package_int_size,
+module ebox( dim_int = package_int_size,
             ep = package_thickness,
             aperture_axis=Z_axis,
-            lid=false,
+            lid=true,
             boss_diam=package_boss_diam,
-            full=false,
-            rounded=true){
+            full=true, 
+            rounded = true){
 dim = dim_int+[ep,ep,ep];       // external dim
 dim_bos = dim_int-[boss_diam,boss_diam,boss_diam];
+ratio_YX = dim[Y_axis]/dim[X_axis];     // scale between Y & X dimensions        
 
 translate([lid && aperture_axis==X_axis ? -dim_int[X_axis]/2 : 0, lid && aperture_axis==Y_axis ? -dim_int[Y_axis]/2 : 0, lid && aperture_axis==Z_axis ? -dim_int[Z_axis]/2 : 0])    
     difference(){
     // the main body
     union(){
-        cube(dim, center=true);
+        scale([1,ratio_YX,1])cylinder(h=dim[Z_axis], d=dim[X_axis], center=true);
         // rounded corners
         if (rounded){
-            for (x=[-1, +1])
-                for (z=[-1,+1]){
-                    // flasque coté
-                    translate([x*dim[X_axis]/2,0,0])scale([0.1,1,1])
-                    cylinder(h=z*dim[Z_axis],d=dim[Y_axis], center=true);
+            for (z=[-1,1]){
                     // flasque haut/bas
-                    translate([0,0,z*dim[Z_axis]/2])rotate([0,90,0])scale([0.1,1,1])
-                    cylinder(h=dim[X_axis],d=dim[Y_axis], center=true);
-                    //    coin haut gauche
-                    translate([x*dim[X_axis]/2,0,z*dim[Z_axis]/2])scale([0.1,1,0.1])sphere(d=dim[Y_axis]);
-                    }
+                    translate([0,0,z*dim[Z_axis]/2])scale([1,ratio_YX,1])scale([1,1,0.1])
+                    sphere(d=dim[X_axis]);
+                }
             }
         }   // union of main body
 
     // bosses - interior
     if (!full){
         difference(){
-            if (!lid)cube(dim_int, center=true);
+            if (!lid)translate([0,0,ep])scale([1,ratio_YX,1])cylinder(h=dim_int[Z_axis]+ep, d=dim_int[X_axis], center=true);
+        
             for (i=[-1,1])
                 for (j=[1, -1])
                 translate([
@@ -262,97 +261,88 @@ translate([lid && aperture_axis==X_axis ? -dim_int[X_axis]/2 : 0, lid && apertur
 //-------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------
 module high_lid(){
-dim_bos = package_int_size-[package_boss_diam,package_boss_diam,package_boss_diam];    
+ratio_YX = package_int_size[Y_axis]/package_int_size[X_axis];     // scale between Y & X dimensions 
+hi=high_lid_inclusion; //-high_spacer_height-clearance;    
 difference(){    
     union(){
         // basic cover box
-        box(aperture_axis=Z_axis, lid=true);
+        ebox(aperture_axis=Z_axis, lid=true);
         // rounded up cover
-        translate([0,0,package_thickness])scale([1,1,0.2])rotate([0,90,90])cylinder(d=0.7*package_int_size[X_axis], h=0.7*package_int_size[Y_axis], center=true);
+        translate([0,0,package_thickness])scale([1,ratio_YX,0.2])rotate([0,90,90])sphere(d=0.7*package_int_size[X_axis]);
         // inclusion
-        translate([0,0,-high_lid_inclusion/2])cube([package_int_size[X_axis]-clearance, package_int_size[Y_axis]-clearance, high_lid_inclusion], center=true);
+        translate([0,0,-high_lid_inclusion/2+high_spacer_height])scale([1,ratio_YX,1])cylinder(h=hi, d=package_int_size[X_axis], center=true);
     }
-    // 4 holes   
-  for (i=[-1, +1])
-     for (j=[-1,+1])
-           translate([i*dim_bos[X_axis]/2,-dim_bos[Y_axis]/2*i*j, 0])
-     cylinder(h=package_int_size[Z_axis], d=package_boss_diam/2, center=true);
+   
     // electrodes holes
     translate([0,0,package_thickness])electrodes();
      // inclusion
-     translate([0,0,-high_lid_inclusion/2-4])cube([package_int_size[X_axis]*0.8, package_int_size[Y_axis]*0.8, high_lid_inclusion], center=true);
+     translate([0,0,-high_lid_inclusion/2-4])scale([1,ratio_YX,1])cylinder(h=high_lid_inclusion, d=package_int_size[X_axis]*0.8, center=true);
     }    
 }
 
 //-------------------------------------------------------------------------------------
 module main_body(){ 
-zshift = 10;    // z shift to be sure to open the holes  
+zshift = 10;    // z shift to be sure to open the holes 
+ratio_YX = package_int_size[Y_axis]/package_int_size[X_axis];     // scale between Y & X dimensions        
 difference(){
     //main box
-    translate([0, 0, 0])box(dim_int = package_int_size, aperture_axis=Z_axis, full=true, rounded=true);
+    translate([0, 0, 0])ebox(dim_int = package_int_size, aperture_axis=Z_axis, full=true, rounded=false, lid=false);
     // HV module hole
     translate([hv_X_pos,0,-58])scale([1.05,1.05,4])HV();
     // battery hole
     translate([battery_X_pos,0,100])rotate([180,0,0])scale([1.05,1.05,4])battery();
     // wire path hole
-    translate([3,0,0])cube([10,package_int_size[Y_axis],500], center=true);
+    translate([button_X_pos,0,0])cube([package_wire_hole_width,ratio_YX*package_int_size[X_axis]-package_thickness,500], center=true);
     // charger hole
-     translate([charger_X_pos,0,-package_int_size[Z_axis]/2])rotate([180,0,90])scale([1,1,5])charger(footprint=true);
+     translate([charger_X_pos,0,-package_int_size[Z_axis]/2]+2)rotate([180,0,90])scale([1,1,5])charger(footprint=true);
     // button hole
-    translate([3,-package_int_size[Y_axis]/2,package_int_size[Z_axis]/4])rotate([90,0,0])button(true);
+    translate([button_X_pos,-package_int_size[Y_axis]/2,button_Z_pos])rotate([90,0,0])button(true);
     // high lid hole
-    translate([0,0,(package_int_size[Z_axis]-high_lid_inclusion-high_spacer_height+zshift)/2-clearance])cube([package_int_size[X_axis], package_int_size[Y_axis], high_lid_inclusion+high_spacer_height+clearance+zshift], center=true);
+    translate([0,0,(package_int_size[Z_axis]-high_lid_inclusion-high_spacer_height+zshift)/2-clearance])scale([1,ratio_YX,1])cylinder(h=low_lid_inclusion+zshift, d=package_int_size[X_axis], center=true);
     // low lid hole
-    translate([0,0,-(package_int_size[Z_axis]-low_lid_inclusion+zshift)/2])cube([package_int_size[X_axis], package_int_size[Y_axis], low_lid_inclusion+zshift], center=true);
+    translate([0,0,-(package_int_size[Z_axis]-low_lid_inclusion+zshift)/2])scale([1,ratio_YX,1])cylinder(h=low_lid_inclusion+zshift, d=package_int_size[X_axis], center=true);
  }
 }
 
 //-------------------------------------------------------------------------------------
 module low_lid(){
-dim_bos = package_int_size-[package_boss_diam,package_boss_diam,package_boss_diam];    
+ratio_YX = package_int_size[Y_axis]/package_int_size[X_axis];     // scale between Y & X dimensions        
 difference(){
     union(){
-        rotate([0,180,0])box(aperture_axis=Z_axis, lid=true);        
-    translate([0,0,(low_lid_inclusion-10*clearance)/2])cube([package_int_size[X_axis]-clearance, package_int_size[Y_axis]-clearance, low_lid_inclusion-10*clearance], center=true); // 10*clearance smaller
+        rotate([0,180,0])ebox(aperture_axis=Z_axis, lid=true);        
+        translate([0,0,(low_lid_inclusion-10*clearance)/2])scale([1,ratio_YX,1])cylinder(h=low_lid_inclusion, d=package_int_size[X_axis]-clearance, center=true);
+        
     }   
-      // 4 holes   
-  for (i=[-1, +1])
-     for (j=[-1,+1])
-           translate([i*dim_bos[X_axis]/2,-dim_bos[Y_axis]/2*i*j, 0])cylinder(h=package_int_size[Z_axis], d=package_boss_diam/2, center=true); 
-     // on/off switch
-     translate([-10,0,0]){
+    // on/off switch
+     translate([-on_off_switch_X_pos,0,0]){
         cube([10,14,200], center=true);
-        translate([0,0,-100])cube([20,30,200], center=true);
+        translate([0,0,-100])cube([17,25,200], center=true);
          }     
      // battery plot
      translate([battery_X_pos,0,low_lid_inclusion])cylinder(h=3,r=2, center=true);    
      // charger
-     translate([charger_X_pos,0,2])rotate([180,0,90])charger(footprint=true);  
+     translate([charger_X_pos,0,0.8])rotate([180,0,90])charger(footprint=true);  
      // wire path
-     translate([0,0,low_lid_inclusion])cylinder(h=5, r=package_int_size[Y_axis]*0.4, center=true);
+     translate([0,0,low_lid_inclusion])cylinder(h=10, r=package_int_size[Y_axis]*0.4, center=true);
      translate([battery_X_pos/2-2,0,low_lid_inclusion])cube([battery_X_pos,2,2], center=true);    
     }
 }
 
 //-------------------------------------------------------------------------------------
 module high_spacer(height = high_spacer_height){
-dim_bos = package_int_size-[package_boss_diam,package_boss_diam,package_boss_diam];    
+    ratio_YX = package_int_size[Y_axis]/package_int_size[X_axis];     // scale between Y & X 
 union(){
      difference(){   
-     cube([package_int_size[X_axis]-clearance, package_int_size[Y_axis]-clearance, height], center=true);
-      // 4 holes   
-      for (i=[-1, +1])
-         for (j=[-1,+1])
-               translate([i*dim_bos[X_axis]/2,-dim_bos[Y_axis]/2*i*j, 0])cylinder(h=package_int_size[Z_axis]/2, d=package_boss_diam/2, center=true); 
-        // HV module hole
-        translate([hv_X_pos,0,-58])scale([1.05,1.05,4])HV();
-        // wire hole
-        translate([3,10,0])cylinder(h=200, d=10, center=true); 
-        translate([battery_X_pos,4,0])cylinder(h=30,r=1.5, center=true);
-        }
-        // battery plot
-        translate([battery_X_pos,0,-2])cylinder(h=height,r2=2, r1=1.5, center=true);
-    } 
+         scale([1,ratio_YX,1])cylinder(h=height, d=package_int_size[X_axis]-clearance, center=true);
+     // HV module hole
+    translate([hv_X_pos,0,-58])scale([0.7,0.7,4])HV();
+    // wire hole
+    translate([button_X_pos,10,0])cylinder(h=200, d=10, center=true); 
+    translate([battery_X_pos,4,0])cylinder(h=30,r=1.5, center=true);
+    }
+    // battery plot
+    translate([battery_X_pos,0,-2])cylinder(h=height,r2=2, r1=1.5, center=true);
+} 
 }
 
 
@@ -360,24 +350,24 @@ union(){
 //*****************************************************************************
 //                              main script code
 //*****************************************************************************
-//difference(){
+difference(){
      main_body();
-    //translate([0,100,0])cube([200,200,200], center=true);
-//}
+    translate([0,100,0])cube([200,200,200], center=true);
+}
 
-translate([0,0, package_int_size[Z_axis]/2])color("red")high_lid();
-//
-translate([3,-package_int_size[Y_axis]/2,package_int_size[Z_axis]/4])rotate([90,0,0])button(false);
-//
-translate([0,0, package_int_size[Z_axis]/2-high_lid_inclusion-2])high_spacer();
-//
-color("green")translate([battery_X_pos,0, package_int_size[Z_axis]/2-battery_length/2+19])rotate([180,0,0])battery();
-//
-translate([hv_X_pos,0,-32])HV();
-//
-translate([-10,0,-package_int_size[Z_axis]/2])rotate([0,90,90])on_off_switch();
-translate([0,0,-package_int_size[Z_axis]/2 ]){
-   !low_lid();
+translate([0,0, package_int_size[Z_axis]/2+1])color("red")high_lid();
+//////
+translate([button_X_pos,-package_int_size[Y_axis]/2,button_Z_pos])rotate([90,0,0])button(false);
+//////
+translate([0,0, package_int_size[Z_axis]/2-high_lid_inclusion+high_spacer_height+clearance-2])high_spacer();
+//////
+color("green")translate([battery_X_pos,0,battery_length/2-2])rotate([180,0,0])battery();
+//////
+translate([hv_X_pos,0,-34])HV();
+//////
+translate([-on_off_switch_X_pos,0,-package_int_size[Z_axis]/2])rotate([0,90,90])on_off_switch();
+translate([0,0,-package_int_size[Z_axis]/2-2.5 ]){
+    low_lid();
     translate([charger_X_pos,0,2])rotate([180,0,90])charger(footprint=false);    
     }
-color("white")translate([0,0,package_int_size[Z_axis]/2+package_thickness])electrodes();
+//color("white")translate([0,0,package_int_size[Z_axis]/2+package_thickness+1])electrodes();

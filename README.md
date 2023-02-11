@@ -22,12 +22,15 @@ The author cannot, under any circumstances, be held responsible for the use you 
 
 This project involves the design and the creation of a DIY portable device that can deliver a strong electrical shock for self defense purposes. 
 
-![device](images/device.png)
-![device1](images/device1.png)
-![device2](images/device2.png)
-![device3](images/device3.png)
+Three variants are available for the device design: a square case, a cylindrical case and an elliptical case.
 
-**3D representation of the device** 
+![device](images/square_device_1.png)
+![device](images/elliptic_device_2.png)
+![device](images/elliptic_device_1.png)
+![device](images/elliptic_device_3.png)
+![device](images/cylindric_device_1.png)
+
+**3D representation of the three variants devices** 
 
 
 ## Description
@@ -39,39 +42,30 @@ The device is based on four main common electronic components that can easily be
 a rechargeable 18650 Lithium-Ion battery, 3.7V, 2200mAh
 
 ![](images/charger.png)
-a battery charging circuit
+
+[a battery charging circuit for about 2.5$](https://fr.aliexpress.com/item/1005004427559571.html?spm=a2g0o.order_list.order_list_main.9.74245e5bkOnrTS&gatewayAdapt=glo2fra))
 
 ![](images/high_voltage.png)
 
-a DC 3V-6V bis 400kV Boost Step up Power Module High Voltage Generator
+[a DC 3V-6V bis 400kV Boost Step up Power Module High Voltage Generator](https://www.aliexpress.com/item/1005004160619584.html?spm=a2g0o.order_list.order_list_main.39.74245e5bkOnrTS)
 
 ![](images/switchs.png)
 
-on/off switch and an activation button.
+[ON/OFF switch](https://fr.aliexpress.com/item/4001165826718.html?spm=a2g0o.order_list.order_list_main.24.74245e5bkOnrTS&gatewayAdapt=glo2fra) and an activation button.
 
-The above components are organized into an housing case compozed of 4 parts :
+- the main body containning the battery, the high voltage module and the flash button. The size of the square design presented model is 62.9 mm x 32.5 mm x 92 mm
 
-![](images/main.png)
+- a cover supporting the electrodes on which the high voltage will be applied
 
-the main body containning the battery, the high voltage module and the flash button. The size of the presented model is 62.9 mm x 32.5 mm x 92 mm
+- a bottom cover supporting the ON/OFF switch and the usb battery charger
 
-![](images/top.png)
-
-the cover supporting the electrodes on which the high voltage will be applied
-
-![](images/bottom.png)
-
-the bottom cover supporting the ON/OFF switch and the usb battery charger
-
-![](images/spacer.png)
-
-a spacer. 
+- a spacer. 
 
 ## Mechanical design
 
 The device is designed as a full parametric 3D model under [OpenSCAD](https://openscad.org).
 
-You can use, as it, or tune the model by adjusting the dimensions of various elements (default value parameters of these elements are specified below):
+You can use, as it, or tune the model by adjusting the dimensions of various elements (example: default value parameters of these elements for a square case device are specified below - see the source code for ellipical and cylindrical cases):
 
 - **the electrodes**
 	- electrode_diam=3;
@@ -111,14 +105,14 @@ You can use, as it, or tune the model by adjusting the dimensions of various ele
  
 ## Electrical design
 
-The electrical design includes the integration of all components and the implementation of safety features to prevent accidental discharge. 
+The electrical design includes the integration of all components and the implementation of safety features consisting in a dual "ON/OFF" switch and a flash button to prevent accidental discharge. 
 
-..... todo 
+![device](images/shematics.png)
 
 
 ## Conclusion
 
-The goal of this project is to create a practical and easy-to-use self defense tool that can provide a strong electrical shock to an attacker.
+The goal of this project is to create a practical and easy-to-use self defense tool that can provide a strong electrical shock to an attacker. 
 
 
      
